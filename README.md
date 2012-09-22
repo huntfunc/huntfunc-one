@@ -3,53 +3,12 @@ huntfunc-one
 ============
 
 #Huntsville Functional Programmin Group 
-##Project Dashboard 
-##a ClojureScript One project
+##Project Dashboard - a ClojureScript One project
 
-# ClojureScript One
+This project is an experimental take off on the ClojureScript One project. The original 
+ClojureScript One project can be found [here][https://github.com/brentonashworth/one/wiki].
 
-We think that [ClojureScript][] is amazing and that it provides endless
-possibilities for making web development much more fun. To realize
-these possibilities, we need your help. Someone has to do the work to
-turn the possible into reality.
-
-We think that the best way to convince you to help us is to allow you
-to experience the wonder of ClojureScript development for
-yourself. The purpose of this project is to help you get started with
-ClojureScript as smoothly and quickly as possible and to set you up
-with an excellent working environment.
-
-Getting started means many things. We often forget how much we need to
-know to be comfortable in a programming environment. How do we
-organize code? How do we test? What is the most productive workflow?
-How do we deploy our application? We will attempt to answer all of these
-questions and provide working examples.
-
-The project includes a working sample application, useful tools, and
-libraries in various states of development. Many of the libraries in
-the project will eventually mature and become their own projects. The
-process of creating good libraries and frameworks takes time and
-experience. Instead of waiting until they are finished, we thought it
-would be better to show you now. Once you see the potential, we know
-that you will want to join in and help.
-
-# What's here
-
-This project will help you lean how to:
-
-* use ClojureScript tools and other Clojure libraries to create a
-  productive development environment
-* effectively work with the ClojureScript tools
-* organize your code
-* keep visual design activities separate from application code
-* run ClojureScript (in a remote JavaScript environment) from Clojure
-* test ClojureScript using any Clojure test framework
-* structure a ClojureScript application
-* use Clojure data to talk to a Clojure service
-* build and deploy to Heroku
-* work with ClojureScript dependencies
-
-# Is this a library or a framework?
+## Is this a library or a framework?
 
 ClojureScript One is hard to classify. It is not a library or a
 framework. It is more like a classroom, a laboratory or a starter
