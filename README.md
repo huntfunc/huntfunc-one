@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ClojureScript One
 
 We think that [ClojureScript][] is amazing and that it provides endless
@@ -140,3 +141,9 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [website]: http://clojurescriptone.com
 [how-we-work]: https://github.com/brentonashworth/one/wiki/HowWeWork
 [issues]: https://github.com/brentonashworth/one/issues
+=======
+huntfunc-one
+============
+
+Huntville Functional Project Dashboard - a ClojureScript One project
+>>>>>>> a38d9cbc80eff155121de6c6bcc38b04c3e30b89
