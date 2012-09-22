@@ -12,7 +12,7 @@ I believe that that this project can be down loaded into a directory call hfp-on
 on your machine, run the command "lein bootstrap" then "lein repl" just as you would to run the sample 
 application in the directory "one".
 
-This project is all still very much experimental and has a lot of needed work - see the [road map]. Below
+This project is all still very much experimental and has a lot of needed work (see the [road map][]). Below
 is some of the documentation for the ClojureScript One getting started.
 
 ## Is this a library or a framework?
