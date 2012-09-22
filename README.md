@@ -8,6 +8,16 @@ huntfunc-one
 This project is an experimental take off on the ClojureScript One project. The original 
 ClojureScript One project can be found [here](https://github.com/brentonashworth/one/wiki).
 
+This project replace the the the project called "sample" in the original ClojureScript One download.
+This project resides in a directory call "hfp-one" instead of "one" which is the default install 
+directory of the original project that can be loadeded from [here] (https://github.com/brentonashworth/one).
+
+I believe that that this project can be down loaded into a directory call hfp-one, if lein is already installed
+on your machine, run the command "lein bootstrap" then "lein repl" just as you would to run the sample 
+application in the directory "one".
+
+This project is all still very much experimental and has a lot of needed work (see the road map). 
+
 ## Is this a library or a framework?
 
 ClojureScript One is hard to classify. It is not a library or a
@@ -108,4 +118,3 @@ Distributed under the Eclipse Public License, the same as Clojure uses. See the 
 [how-we-work]: https://github.com/brentonashworth/one/wiki/HowWeWork
 [issues]: https://github.com/brentonashworth/one/issues
 
->>>>>>> a38d9cbc80eff155121de6c6bcc38b04c3e30b89
