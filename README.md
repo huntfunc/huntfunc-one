@@ -2,11 +2,11 @@
 huntfunc-one
 ============
 
-#Huntsville Functional Programmin Group 
+#Huntsville Functional Programming Group 
 ##Project Dashboard - a ClojureScript One project
 
 This project is an experimental take off on the ClojureScript One project. The original 
-ClojureScript One project can be found [here][https://github.com/brentonashworth/one/wiki].
+ClojureScript One project can be found [here](https://github.com/brentonashworth/one/wiki).
 
 ## Is this a library or a framework?
 
