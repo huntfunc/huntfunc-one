@@ -1,11 +1,7 @@
-=======
-huntfunc-one
-============
-
 #Huntsville Functional Programming Group 
 ##Project Dashboard - a ClojureScript One project
 
-This project is an experimental take off on the ClojureScript One project. The original 
+This project is an experimental take off on the ClojureScript One "sample" project. The original 
 ClojureScript One project can be found [here](https://github.com/brentonashworth/one/wiki).
 
 This project replace the the the project called "sample" in the original ClojureScript One download.
@@ -16,7 +12,8 @@ I believe that that this project can be down loaded into a directory call hfp-on
 on your machine, run the command "lein bootstrap" then "lein repl" just as you would to run the sample 
 application in the directory "one".
 
-This project is all still very much experimental and has a lot of needed work (see the road map). 
+This project is all still very much experimental and has a lot of needed work (see the [road map]). Below
+is some of the documentation for the ClojureScript One getting started.
 
 ## Is this a library or a framework?
 
