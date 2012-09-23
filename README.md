@@ -26,7 +26,13 @@ to do things that you may not have thought possible. But most of all,
 we hope that it will show you how much fun web development can be in
 ClojureScript.
 
-The intended use of the project is:
+
+    Th is 
+    abox
+    is it?
+
+
+    The intended use of the project is:
 
 1. Get all the tools running
 2. Read through the wiki, running all the examples
