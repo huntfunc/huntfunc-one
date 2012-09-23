@@ -4,12 +4,12 @@
 This project is an experimental take off on the ClojureScript One "sample" project. The original 
 ClojureScript One project can be found [here](https://github.com/brentonashworth/one/wiki).
 
-This project replace the the the project called "sample" in the original ClojureScript One download.
-This project resides in a directory call "hfp-one" instead of "one" which is the default install 
-directory of the original project that can be loadeded from [here] (https://github.com/brentonashworth/one).
+This project replaces the application called "sample" in the original ClojureScript One download.
+Download this project into a directory call "hfp-one" instead of "one" the default install for ClojureScript One.
+The original project can be loadeded from [here] (https://github.com/brentonashworth/one).
 
-I believe that that this project can be down loaded into a directory call hfp-one, if lein is already installed
-on your machine, run the command "lein bootstrap" then "lein repl" just as you would to run the sample 
+If lein is already installed on your machine, run the command "lein bootstrap" then "lein repl" from the directory 
+"hfp-one" just as you would to run the sample 
 application in the directory "one".
 
 This project is all still very much experimental and has a lot of needed work (see the [road map](https://github.com/huntfunc/huntfunc-one/wiki/Road-Map)). Below
@@ -26,14 +26,7 @@ to do things that you may not have thought possible. But most of all,
 we hope that it will show you how much fun web development can be in
 ClojureScript.
 
-
-    Th is 
-    abox
-    is it?
-
-
-    The intended use of the project is:
-
+The intended use of the project is:
 1. Get all the tools running
 2. Read through the wiki, running all the examples
 3. Fire up a browser-connected REPL and explore the sample application
