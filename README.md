@@ -2,8 +2,8 @@
 ##Project Dashboard - a ClojureScript One project
 
 This project is an experimental take off on the ClojureScript One "sample" project. The original 
-ClojureScript One project can be found [here](https://github.com/brentonashworth/one/wiki). The [goals] (/wiki/huntfunc-one-project-wiki)
-and the [road map] (Road-Map) and in the wiki.
+ClojureScript One project can be found [here](https://github.com/brentonashworth/one/wiki). The [goals] (https://github.com/huntfunc/huntfunc-one/wiki/huntfunc-one-project-wiki)
+and the [road map] (https://github.com/huntfunc/huntfunc-one/wiki/Road-Map) are in the wiki.
 
 This project replaces the application called "sample" in the original ClojureScript One download.
 Download this project into a directory call "hfp-one" instead of "one" the default install for ClojureScript One.
