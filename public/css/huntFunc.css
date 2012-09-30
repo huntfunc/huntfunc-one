@@ -260,26 +260,20 @@ acronym {
   left: 50px;
 }
 
-#exPArea, #exPList  {
-  width: 16px;
-  height: 16px;
-  position: absolute;
-
-}
-
-#exPArea, #exPList  {
-  visibility: visible;
-}
 
 #exPList  {
+  width: 16px;
+  height: 16px;
+}
+/*
+#exPList  {
+  visibility: visible;
+}
+*/
+#exPList  {
+  position: absolute;
   top: 15px; 
   left: 130px;
-  z-index: 100;  
-}
-
-#exPArea  {
-  top: 9px;
-  left: 255px; 
   z-index: 100;  
 }
 
@@ -289,6 +283,16 @@ acronym {
 
 .foldup  {
   background: transparent url(/images/foldup.png) no-repeat 0 0;  
+}
+
+div[id^='exPArea-']{
+  width: 16px;
+  height: 16px;
+  position: relative;
+  float: left;
+  top: 8px;
+  left: 255px;
+  z-index: 100;  
 }
 
 .opened {

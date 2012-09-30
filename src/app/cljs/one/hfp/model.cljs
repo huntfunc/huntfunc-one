@@ -5,7 +5,8 @@
             [one.hfp.logging :as log]))
             
 (def project-list "exPList")
-(def project-detail "exPArea")
+(def project-detail "exPArea-1")
+(def project-detail "exPArea-2")
 
 (def ^{:doc "An atom containing a map which is the application's current state."}
   state (atom {}))
