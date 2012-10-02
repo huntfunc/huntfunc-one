@@ -1,6 +1,6 @@
 (ns ^{:doc "Render the views for the application."}
   one.hfp.view
-  (:use [domina :only (append! detach! set-html! set-styles! styles by-id set-style! 
+  (:use [domina :only (append! prepend! detach! set-html! set-styles! styles by-id set-style! 
                        add-class! remove-class! set-classes! classes
                        by-class value set-value! set-text! nodes single-node)]
         [domina.xpath :only (xpath)]
@@ -14,6 +14,7 @@
             [one.dispatch :as dispatch]
             [one.hfp.animation :as fx]
 			      [one.hfp.logging :as log]
+            [one.hfp.model :as model]
 			))
 
 (def ^{:doc "A map which contains chunks of HTML which may be used
@@ -29,14 +30,21 @@
   (log/start-log "hfp.log")
   (log/log "app started")
   (add-expand-fold-listener "exPList")
-  (add_pnode "HuntFunc Project Dashboard" (str "p-head_" 1) (str "exPArea-" 1))
-  (add_pnode "Virtual Lending Library" (str "p-head_" 2) (str "exPArea-" 2))
+  ;; the following is hard coded for the sake of a prototype these values come from doseq 
+  ;; on a list that will be selected from a presisted source on the server 
+  ;;(add-pnode "Virtual Lending Library" (str "-" 2))
+  ;;(add-pnode "HuntFunc Project Dashboard" (str "-" 1))
+  (load-proj-details model/details-2)
+  (load-projects model/projList)
+  (log/log "after thought")
+
 
 )
   
 (defmethod render :open_projs [_]
   (log/log "open projects")
   (fx/p-list-show "projectArea")
+  ;; (doseq will be used to add and remove listeners
   (add-expand-fold-listener (str "exPArea-" 1))
   (add-expand-fold-listener (str "exPArea-" 2))
 )
@@ -51,8 +59,6 @@
 (defmethod render :open_detail [_]
   (log/log "open a project detail")
   ;;(fx/p-list-show "projectArea")
-  ;;(add-expand-fold-listener (str "exPArea_" 1))
-  ;;(add-expand-fold-listener (str "exPArea_" 2))
 )
   
 (defmethod render :close_detail [_]
@@ -93,10 +99,39 @@
        (remove-class! (single-node (by-id ele-id)) show-class)))       
 )
 
-(defn add_pnode [pTitle phead-id pId]
-    (append! (xpath "//div[@id='projectArea']") 
-      (str "<div id=" phead-id " ><p class=\"projHead\">" pTitle "</p>"
-       "<div id=" pId " class=\"expand\"></div></div>"))        
+(defn add-pnode [pTitle pId]
+    (prepend! (xpath "//div[@id='projectArea']") 
+      (str "<div id=" (str "pHead" pId) " >"
+             "<p class=\"projHead\">" pTitle "</p>"
+             "<div id=" (str "exPArea" pId) " class=\"expand\"></div>"
+             "<div id=" (str "pDetail" pId) "></div>"
+             "</div>"))        
+)
+
+(defn load-projects [projList]
+   (def cntl (- (count projList) 1))
+   (loop  [cnt 0]
+     (log/log (nth projList cnt))
+     (add-pnode (nth projList cnt) (str "-" (+ 1 cnt)))
+    (if (>= cnt cntl)
+      nil    
+      (recur (inc cnt))
+      ))
+) 
+
+(defn load-proj-details [details]
+    (log/log "in test")  
+    (def cntl (- (count details) 1))
+    (log/log cntl) 
+     (loop  [cnt 0]
+     (log/log (str (nth (nth details cnt) 0) " : " (nth (nth details cnt) 1)))
+    (if (>= cnt cntl)
+      nil
+      (recur (inc cnt))))
+)
+     
+  
+(defn set-nav-for-pnode [pId]
 )
 
 ;;(classes (single-node (by-id ele-id)))
