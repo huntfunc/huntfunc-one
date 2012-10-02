@@ -36,9 +36,7 @@
   ;;(add-pnode "HuntFunc Project Dashboard" (str "-" 1))
   (load-proj-details model/details-2)
   (load-projects model/projList)
-  (log/log "after thought")
-
-
+  
 )
   
 (defmethod render :open_projs [_]
@@ -56,8 +54,8 @@
   (remove-expand-fold-listener (str "exPArea-" 2))
 )
   
-(defmethod render :open_detail [_]
-  (log/log "open a project detail")
+(defmethod render :open_detail [e]
+  (log/log (str "open a project detail"))
   ;;(fx/p-list-show "projectArea")
 )
   
@@ -78,7 +76,7 @@
   (log/log (str "adding opening listener on: " ele-id))
   (event/listen (by-id ele-id)
         "click"
-				#(dispatch/fire (re-class ele-id "foldup" "expand")))
+				#(dispatch/fire (re-class true ele-id "foldup" "expand")))
 )
 
 (defn remove-expand-fold-listener
@@ -90,8 +88,9 @@
   (log/log "done removing listener")
 )		
 
-(defn re-class [ele-id show-class hide-class]
-   (#(dispatch/fire :show_projs [(= [hide-class] (classes (by-id ele-id))) ele-id] ))   
+(defn re-class [do-fire ele-id show-class hide-class]
+   (if do-fire
+   (#(dispatch/fire :show_projs [(= [hide-class] (classes (by-id ele-id))) ele-id] )))   
    (if (= [hide-class] (classes (by-id ele-id)))
      ((add-class! (single-node (by-id ele-id)) show-class)
        (remove-class! (single-node (by-id ele-id)) hide-class))
@@ -117,7 +116,17 @@
       nil    
       (recur (inc cnt))
       ))
-) 
+)
+
+(defn current-proj-detail [det-ele-id]
+    (if (= det-ele-id "exPArea-1" )
+      ((re-class false "exPArea-1" "foldup" "expand")
+      (re-class false "exPArea-2" "expand" "foldup"))
+      ((re-class false "exPArea-2" "expand" "foldup")
+      (re-class false "exPArea-1" "foldup" "expand"))
+      )
+)
+           
 
 (defn load-proj-details [details]
     (log/log "in test")  
