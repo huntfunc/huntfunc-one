@@ -1,7 +1,7 @@
 (ns ^{:doc "Render the views for the application."}
   one.hfp.view
   (:use [domina :only (append! prepend! detach! set-html! set-styles! styles by-id set-style! 
-                       add-class! remove-class! set-classes! classes
+                       add-class! remove-class! set-classes! classes has-class?
                        by-class value set-value! set-text! nodes single-node)]
         [domina.xpath :only (xpath)]
         [one.browser.animation :only (play)])
@@ -14,7 +14,7 @@
             [one.dispatch :as dispatch]
             [one.hfp.animation :as fx]
 			      [one.hfp.logging :as log]
-            [one.hfp.model :as model]
+            [one.hfp.data :as data]
 			))
 
 (def ^{:doc "A map which contains chunks of HTML which may be used
@@ -34,9 +34,9 @@
   ;; on a list that will be selected from a presisted source on the server 
   ;;(add-pnode "Virtual Lending Library" (str "-" 2))
   ;;(add-pnode "HuntFunc Project Dashboard" (str "-" 1))
-  (load-proj-details model/details-2)
-  (load-projects model/projList)
-  
+  (load-projects data/projList)
+  (load-proj-details "pDetail-2" data/details-2) 
+  (load-proj-details "pDetail-1" data/details-1) 
 )
   
 (defmethod render :open_projs [_]
@@ -54,7 +54,7 @@
   (remove-expand-fold-listener (str "exPArea-" 2))
 )
   
-(defmethod render :open_detail [e]
+(defmethod render :open_detail [_]
   (log/log (str "open a project detail"))
   ;;(fx/p-list-show "projectArea")
 )
@@ -88,22 +88,37 @@
   (log/log "done removing listener")
 )		
 
-(defn re-class [do-fire ele-id show-class hide-class]
-   (if do-fire
-   (#(dispatch/fire :show_projs [(= [hide-class] (classes (by-id ele-id))) ele-id] )))   
-   (if (= [hide-class] (classes (by-id ele-id)))
-     ((add-class! (single-node (by-id ele-id)) show-class)
-       (remove-class! (single-node (by-id ele-id)) hide-class))
-	   ((add-class! (single-node (by-id ele-id)) hide-class)
-       (remove-class! (single-node (by-id ele-id)) show-class)))       
+(defn re-class [do-fire? ele-id show-class hide-class]
+   (log/log "start re-class")
+   (if do-fire?
+   (#(dispatch/fire :show_projs [(has-class? (by-id ele-id) hide-class) ele-id])))
+   (log/log "re-class after fire")    
+   (if (has-class? (by-id ele-id) hide-class)
+     ((add-class! (by-id ele-id) show-class)
+       (log/log (str "re-class 1: " show-class)) 
+       (remove-class! (by-id ele-id) hide-class)
+       (log/log (str "re-class 2: " hide-class)) )
+	   ((add-class! (by-id ele-id) hide-class)
+       (log/log (str "re-class 3: " hide-class)) 
+       (remove-class! (by-id ele-id) show-class)
+       (log/log (str "re-class 4: " show-class))))
+    (log/log "end re-class ")       
 )
+
+;;(defn re-class [do-fire? ele-id show-class hide-class]
+;;   (if do-fire?
+;;   (#(dispatch/fire :show_projs [(has-class? (by-id ele-id) hide-class) ele-id] )))   
+;;   (if (has-class? (by-id ele-id) hide-class)
+;;     (set-classes! (by-id ele-id) [show-class])
+;;	   (set-classes! (by-id ele-id) [hide-class]))       
+;;)
 
 (defn add-pnode [pTitle pId]
     (prepend! (xpath "//div[@id='projectArea']") 
       (str "<div id=" (str "pHead" pId) " >"
              "<p class=\"projHead\">" pTitle "</p>"
              "<div id=" (str "exPArea" pId) " class=\"expand\"></div>"
-             "<div id=" (str "pDetail" pId) "></div>"
+             "<div id=" (str "pDetail" pId) " class=\"closed\"></div>"
              "</div>"))        
 )
 
@@ -119,27 +134,38 @@
 )
 
 (defn current-proj-detail [det-ele-id]
-    (if (= det-ele-id "exPArea-1" )
-      ((re-class false "exPArea-1" "foldup" "expand")
-      (re-class false "exPArea-2" "expand" "foldup"))
-      ((re-class false "exPArea-2" "expand" "foldup")
-      (re-class false "exPArea-1" "foldup" "expand"))
+    (log/log (str "Current Project Detail for " det-ele-id))    
+    (if (= det-ele-id "exPArea-1")
+      ((re-class false "pDetail-1" "closed" "opened")        
+      (re-class false "pDetail-2" "closed" "opened")
+      (re-class true "exPArea-2" "foldup" "expand")
+      (re-class true "exPArea-1" "foldup" "expand"))
+    
+      ((re-class false "pDetail-2" "closed" "opened")        
+      (re-class false "pDetail-1" "closed" "opened")
+      (re-class true "exPArea-1" "foldup" "expand")
+      (re-class true "exPArea-2" "foldup" "expand"))
       )
 )
            
-
-(defn load-proj-details [details]
-    (log/log "in test")  
+(defn load-proj-details [dnode details]
+    (log/log "in detail load")
     (def cntl (- (count details) 1))
-    (log/log cntl) 
-     (loop  [cnt 0]
-     (log/log (str (nth (nth details cnt) 0) " : " (nth (nth details cnt) 1)))
-    (if (>= cnt cntl)
-      nil
-      (recur (inc cnt))))
+    (log/log (str cntl " : " "//div[@id='" dnode "']"))
+    (append! (xpath (str "//div[@id='" dnode "']"))
+      (str "<ul id=\"dl-" dnode "\" class=\"nav\"></ul>"))     
+      (loop  [cnt 0]     
+        (if (nth (nth details cnt) 0)     
+          (append! (xpath (str "//ul[@id='dl-" dnode "']"))
+          (str "<li class=\"detailItem\"><a href=" (nth (nth details cnt) 1) ">" (nth (nth details cnt) 2) "</li>"))
+          (append! (xpath (str "//ul[@id='dl-" dnode "']"))
+          (str "<li class=\"detailItem\">" (nth (nth details cnt) 2) " : " (nth (nth details cnt) 1) "</li>")))   
+        (if (>= cnt cntl)
+          nil
+         (recur (inc cnt))))
+      (log/log "did detail load")
 )
-     
-  
+       
 (defn set-nav-for-pnode [pId]
 )
 

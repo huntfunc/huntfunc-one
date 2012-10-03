@@ -3,7 +3,8 @@
  one.hfp.model
   (:require [one.dispatch :as dispatch]
             [one.hfp.logging :as log]
-            [one.hfp.view :as view]))
+            [one.hfp.view :as view]
+            ))
             
 (def project-list "exPList")
 (def project-detail "exPArea-1")
@@ -29,16 +30,15 @@
              (dispatch/fire :state-change n))
 )
 
-(dispatch/react-to #{:show_projs} (fn [t d] (  if (= (get d 1) project-list)
+(dispatch/react-to #{:show_projs} (fn [t d] (if (= (get d 1) project-list)
                                                (if  (get d 0)
                                                  (swap! state assoc :state :open_projs)
                                                  (swap! state assoc :state :close_projs))
-                                               (if  (get d 0)
-                                                 ((swap! state assoc :state :open_detail) 
-                                                 (log/log (str "type : " t " | d " (get d 1)))
+                                               ((if  (get d 0)
+                                                 (swap! state assoc :state :open_detail)
+                                                 (swap! state assoc :state :close_detail))
                                                  (#(dispatch/fire :show_detail [(get d 1)])))
-                                                 (swap! state assoc :state :close_detail))                                                 
-                                            ))
+                                               ))
 )
 
 (dispatch/react-to #{:show_detail} (fn [t d] (view/current-proj-detail (get d 0)))                                          
