@@ -305,6 +305,11 @@ div[id^='exPArea-']{
   z-index: 100; 
 }
 
+.nav {
+  position: relative;
+  left: 250px;
+}
+
 
 /* basic elements */
 /*
