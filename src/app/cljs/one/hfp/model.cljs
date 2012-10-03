@@ -9,18 +9,7 @@
 (def project-list "exPList")
 (def project-detail "exPArea-1")
 (def project-detail "exPArea-2")
-
-;; these list are only here to get the prototype working - the values should come from the persistent store on 
-;; down the road
-;; see Road Map ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def projList (list "Virtual Lending Library" "HuntFunc Project Dashboard"))
-(def details-2 (list (list "https://github.com/huntfunc/huntfunc-one/wiki/huntfunc-one-project-wiki" "Description")
-                   (list "https:/github.com/huntfunc/huntfunc-one" "GitHub Link")
-                   (list "https://github.com/huntfunc/huntfunc-one/wiki/Road-Map" "Road Map")))
-(def details-1 (list (list "https://github.com/huntfunc/huntfunc-one/wiki/huntfunc-one-project-wiki" "Description")
-                   (list "https:/github.com/huntfunc/huntfunc-one" "GitHub Link")
-                   (list "https://github.com/huntfunc/huntfunc-one/wiki/Road-Map" "Road Map")))                   
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                   
+      
                    
 (def ^{:doc "An atom containing a map which is the application's current state."}
   state (atom {}))
