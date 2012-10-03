@@ -10,6 +10,7 @@
 (def details-2 (list (list true "https://github.com/huntfunc/huntfunc-one/wiki/huntfunc-one-project-wiki" "Description")
                    (list true "https:/github.com/huntfunc/huntfunc-one" "GitHub Link")
                    (list true "https://github.com/huntfunc/huntfunc-one/wiki/Road-Map" "Road Map")
+                   (list true "https://github.com/huntfunc/huntfunc-one/issues" "Issues")
                    (list false "In Development" "Status")))
 (def details-1 (list (list true "https://github.com/huntfunc/huntfunc-one/wiki/The-Virtual-Lending-Library" "Description")
                    (list true "/images/vllUML.png" "A UML (sorta) of the VLL project")
