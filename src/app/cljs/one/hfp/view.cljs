@@ -1,8 +1,15 @@
 (ns ^{:doc "Render the views for the application."}
   one.hfp.view
-  (:use [domina :only (append! prepend! detach! set-html! set-styles! styles by-id set-style! 
-                       add-class! remove-class! set-classes! classes has-class?
-                       by-class value set-value! set-text! nodes single-node)]
+  (:use [domina :only  (nodes single-node by-id by-class children
+                       common-ancestor ancestor? clone append!
+                       prepend! detach!  destroy!  destroy-children!
+                       insert!  insert-before!  insert-after!
+                       swap-content!  style attr set-style! set-attr!
+                       styles attrs remove-attr!  set-styles!
+                       set-attrs! has-class?  add-class!
+                       remove-class!  classes set-classes!  text
+                       set-text! value set-value! html set-html!
+                       set-data! get-data log-debug log)]
         [domina.xpath :only (xpath)]
         [one.browser.animation :only (play)])
 		
@@ -89,29 +96,12 @@
 )		
 
 (defn re-class [do-fire? ele-id show-class hide-class]
-   (log/log "start re-class")
    (if do-fire?
-   (#(dispatch/fire :show_projs [(has-class? (by-id ele-id) hide-class) ele-id])))
-   (log/log "re-class after fire")    
+   (#(dispatch/fire :show_projs [(has-class? (by-id ele-id) hide-class) ele-id])))    
    (if (has-class? (by-id ele-id) hide-class)
-     ((add-class! (by-id ele-id) show-class)
-       (log/log (str "re-class 1: " show-class)) 
-       (remove-class! (by-id ele-id) hide-class)
-       (log/log (str "re-class 2: " hide-class)) )
-	   ((add-class! (by-id ele-id) hide-class)
-       (log/log (str "re-class 3: " hide-class)) 
-       (remove-class! (by-id ele-id) show-class)
-       (log/log (str "re-class 4: " show-class))))
-    (log/log "end re-class ")       
+     (set-classes! (by-id ele-id) show-class)
+	   (set-classes! (by-id ele-id) hide-class))     
 )
-
-;;(defn re-class [do-fire? ele-id show-class hide-class]
-;;   (if do-fire?
-;;   (#(dispatch/fire :show_projs [(has-class? (by-id ele-id) hide-class) ele-id] )))   
-;;   (if (has-class? (by-id ele-id) hide-class)
-;;     (set-classes! (by-id ele-id) [show-class])
-;;	   (set-classes! (by-id ele-id) [hide-class]))       
-;;)
 
 (defn add-pnode [pTitle pId]
     (prepend! (xpath "//div[@id='projectArea']") 
@@ -134,36 +124,32 @@
 )
 
 (defn current-proj-detail [det-ele-id]
-    (log/log (str "Current Project Detail for " det-ele-id))    
-    (if (= det-ele-id "exPArea-1")
-      ((re-class false "pDetail-1" "closed" "opened")        
-      (re-class false "pDetail-2" "closed" "opened")
-      (re-class true "exPArea-2" "foldup" "expand")
-      (re-class true "exPArea-1" "foldup" "expand"))
-    
-      ((re-class false "pDetail-2" "closed" "opened")        
-      (re-class false "pDetail-1" "closed" "opened")
-      (re-class true "exPArea-1" "foldup" "expand")
-      (re-class true "exPArea-2" "foldup" "expand"))
-      )
+    (if (= det-ele-id "exPArea-1")        
+      ((re-class false "pDetail-1" "opened" "closed")
+      (re-class false "exPArea-1" "expand" "foldup")
+      (if (has-class? (by-id "pDetail-2") "opened") 
+        ((re-class false "pDetail-2" "closed" "opened")
+        (re-class false "exPArea-2" "expand" "foldup"))))     
+      ((re-class false "pDetail-2" "opened" "closed")
+      (re-class false "exPArea-2" "expand" "foldup")
+      (if (has-class? (by-id "pDetail-1") "opened") 
+        ((re-class false "pDetail-1" "closed" "opened")
+        (re-class false "exPArea-1" "expand" "foldup")))))
 )
            
 (defn load-proj-details [dnode details]
-    (log/log "in detail load")
     (def cntl (- (count details) 1))
-    (log/log (str cntl " : " "//div[@id='" dnode "']"))
     (append! (xpath (str "//div[@id='" dnode "']"))
       (str "<ul id=\"dl-" dnode "\" class=\"nav\"></ul>"))     
       (loop  [cnt 0]     
         (if (nth (nth details cnt) 0)     
           (append! (xpath (str "//ul[@id='dl-" dnode "']"))
-          (str "<li class=\"detailItem\"><a href=" (nth (nth details cnt) 1) ">" (nth (nth details cnt) 2) "</li>"))
+          (str "<li class=\"detailItem\"><a href=" (nth (nth details cnt) 1) " target=\"_blank\">" (nth (nth details cnt) 2) "</li>"))
           (append! (xpath (str "//ul[@id='dl-" dnode "']"))
           (str "<li class=\"detailItem\">" (nth (nth details cnt) 2) " : " (nth (nth details cnt) 1) "</li>")))   
         (if (>= cnt cntl)
           nil
          (recur (inc cnt))))
-      (log/log "did detail load")
 )
        
 (defn set-nav-for-pnode [pId]

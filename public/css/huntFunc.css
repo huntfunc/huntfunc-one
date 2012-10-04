@@ -265,11 +265,7 @@ acronym {
   width: 16px;
   height: 16px;
 }
-/*
-#exPList  {
-  visibility: visible;
-}
-*/
+
 #exPList  {
   position: absolute;
   top: 15px; 
