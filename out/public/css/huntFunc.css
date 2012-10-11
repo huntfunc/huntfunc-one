@@ -281,7 +281,7 @@ acronym {
   background: transparent url(/images/foldup.png) no-repeat 0 0;  
 }
 
-div[id^='exPArea-']{
+div[id^='exPArea-'] {
   width: 16px;
   height: 16px;
   position: relative;
