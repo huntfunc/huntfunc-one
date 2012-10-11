@@ -18,10 +18,10 @@
             [goog.events.KeyHandler :as key-handler]
             [goog.events :as g-events]
             [clojure.browser.event :as event]
+            [clojure.string :as string]
             [one.dispatch :as dispatch]
             [one.hfp.animation :as fx]
 			      [one.hfp.logging :as log]
-            [one.hfp.data :as data]
 			))
 
 (def ^{:doc "A map which contains chunks of HTML which may be used
@@ -35,40 +35,37 @@
 
 (defmethod render :init [_]
   (log/start-log "hfp.log")
-  (log/log "app started")
+  (log/log "start app")
+  (#(dispatch/fire :load_projs ["init"]))
   (add-expand-fold-listener "exPList")
-  ;; the following is hard coded for the sake of a prototype these values come from doseq 
-  ;; on a list that will be selected from a presisted source on the server 
-  ;;(add-pnode "Virtual Lending Library" (str "-" 2))
-  ;;(add-pnode "HuntFunc Project Dashboard" (str "-" 1))
-  (load-projects data/projList)
-  (load-proj-details "pDetail-2" data/details-2) 
-  (load-proj-details "pDetail-1" data/details-1) 
 )
   
 (defmethod render :open_projs [_]
   (log/log "open projects")
   (fx/p-list-show "projectArea")
-  ;; (doseq will be used to add and remove listeners
-  (add-expand-fold-listener (str "exPArea-" 1))
-  (add-expand-fold-listener (str "exPArea-" 2))
+  (loop [i 0]
+    (add-expand-fold-listener (str "exPArea-" (+ i 1)))
+    (if (< i (- (count (children (xpath "//div[@id='projectArea']"))) 1))
+      (recur (inc i))))    
 )
   
 (defmethod render :close_projs [_]
   (log/log "close projects")
   (fx/p-list-hide "projectArea")
-  (remove-expand-fold-listener (str "exPArea-" 1))
-  (remove-expand-fold-listener (str "exPArea-" 2))
+  (loop [i 0]
+    (remove-expand-fold-listener (str "exPArea-" (+ i 1)))
+    (if (< i (- (count (children (xpath "//div[@id='projectArea']"))) 1))
+      (recur (inc i))))  
 )
   
 (defmethod render :open_detail [_]
   (log/log (str "open a project detail"))
-  ;;(fx/p-list-show "projectArea")
+  ;;(fx/p-list-show "projectArea") TODO - Html layout and special effects 
 )
   
 (defmethod render :close_detail [_]
   (log/log "close details")
-  ;;(fx/p-list-hide "projectArea")
+  ;;(fx/p-list-hide "projectArea") TODO - Html layout and special effects
 )
   
 (dispatch/react-to #{:state-change} (fn [_ m] (render m))
@@ -90,9 +87,9 @@
   "Accepts a ele-id and creates listeners for click events on div
    which will then fire rendering changes"
   [ele-id]
-  (log/log (str "removing opening listener on: " ele-id))
+  ;;DEBUG(log/log (str "removing opening listener on: " ele-id))
   (g-events/removeAll (by-id ele-id) "click")
-  (log/log "done removing listener")
+  ;;DEBUG(log/log "done removing listener")
 )		
 
 (defn re-class [do-fire? ele-id show-class hide-class]
@@ -104,7 +101,7 @@
 )
 
 (defn add-pnode [pTitle pId]
-    (prepend! (xpath "//div[@id='projectArea']") 
+    (append! (xpath "//div[@id='projectArea']") 
       (str "<div id=" (str "pHead" pId) " >"
              "<p class=\"projHead\">" pTitle "</p>"
              "<div id=" (str "exPArea" pId) " class=\"expand\"></div>"
@@ -113,32 +110,15 @@
 )
 
 (defn load-projects [projList]
-   (def cntl (- (count projList) 1))
-   (loop  [cnt 0]
-     (log/log (nth projList cnt))
-     (add-pnode (nth projList cnt) (str "-" (+ 1 cnt)))
-    (if (>= cnt cntl)
-      nil    
-      (recur (inc cnt))
+  (loop [cnt 0]    
+     (add-pnode (first (get projList cnt)) (str "-" (+ 1 cnt)))
+     (load-proj-details (str "pDetail-" (+ 1 cnt)) (rest (get projList cnt)))
+     (if (< cnt (- (count projList) 1))    
+       (recur (inc cnt))
       ))
 )
 
-(defn current-proj-detail [det-ele-id]
-    (if (= det-ele-id "exPArea-1")        
-      ((re-class false "pDetail-1" "opened" "closed")
-      (re-class false "exPArea-1" "expand" "foldup")
-      (if (has-class? (by-id "pDetail-2") "opened") 
-        ((re-class false "pDetail-2" "closed" "opened")
-        (re-class false "exPArea-2" "expand" "foldup"))))     
-      ((re-class false "pDetail-2" "opened" "closed")
-      (re-class false "exPArea-2" "expand" "foldup")
-      (if (has-class? (by-id "pDetail-1") "opened") 
-        ((re-class false "pDetail-1" "closed" "opened")
-        (re-class false "exPArea-1" "expand" "foldup")))))
-)
-           
 (defn load-proj-details [dnode details]
-    (def cntl (- (count details) 1))
     (append! (xpath (str "//div[@id='" dnode "']"))
       (str "<ul id=\"dl-" dnode "\" class=\"nav\"></ul>"))     
       (loop  [cnt 0]     
@@ -147,14 +127,19 @@
           (str "<li class=\"detailItem\"><a href=" (nth (nth details cnt) 1) " target=\"_blank\">" (nth (nth details cnt) 2) "</li>"))
           (append! (xpath (str "//ul[@id='dl-" dnode "']"))
           (str "<li class=\"detailItem\">" (nth (nth details cnt) 2) " : " (nth (nth details cnt) 1) "</li>")))   
-        (if (>= cnt cntl)
-          nil
+        (if (< cnt (- (count details) 1))
          (recur (inc cnt))))
 )
        
-(defn set-nav-for-pnode [pId]
+(defn current-proj-detail [data] 
+  (set-classes! (xpath "//div[@id='projectArea']//div[@class='foldup']") ["expand"])
+  (set-classes! (xpath "//div[@id='projectArea']//div[@class='opened']") ["closed"])  
+  (if (get data 0)
+    (re-class false (str "pDetail-" (get (string/split (get data 1) #"-") 1)) "opened" "closed") 
+    (re-class false (str "exPArea-" (get (string/split (get data 1) #"-") 1)) "expand" "foldup"))  
 )
 
-;;(classes (single-node (by-id ele-id)))
+(defn set-nav-for-pnode [pId] - TODO Html layout phase
+)
    
 
