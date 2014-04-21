@@ -1,6 +1,8 @@
 #Huntsville Functional Programming Group 
 ##Project Dashboard - a ClojureScript One project
 
+...This project was an experiment - would like to do more on a ClojureScript Project - maybe one day soon. This project gave me a chance to lean the basics...
+
 This project is an experimental take off on the ClojureScript One "sample" project. The original 
 ClojureScript One project can be found [here](https://github.com/brentonashworth/one/wiki). The [goals] (https://github.com/huntfunc/huntfunc-one/wiki/huntfunc-one-project-wiki)
 and the [road map] (https://github.com/huntfunc/huntfunc-one/wiki/Road-Map) of this project are in the wiki. Feel free to add comments 
